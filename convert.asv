@@ -1,0 +1,24 @@
+clear
+[y,Fs] = audioread('files\T65_1_0_18min.mp3','double');
+
+h = 1/Fs;
+t_start = 0;
+t_stop = t_start + 10;
+
+t = t_start:h:t_stop;
+
+y_start = t_start/h + 1;
+t_step = t_stop/h + 1;
+
+signal = y(y_start:(t_step),1);
+
+figure(1)
+clf
+plot(t,signal,'LineWidth',1),xlabel('Time [s]'),ylabel('[arb. unit]'),title('Raw signal'),grid,set(gca,'FontSize',16);
+grid on
+                   
+FFT_p(signal,Fs,(t_stop - t_start)/h+1)
+
+%STFT
+h1 = tftb_window(((t_stop - t_start)/h-1)/4096);
+tfrstft(signal,t_start/h:length(signal));
