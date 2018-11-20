@@ -1,24 +1,34 @@
-function [imf,residual] = EMD(signal,t)
+function [imf,residual,inst1,inst2,inst3,inst4] = EMD(signal,t)
 
 t = t - t(1,1);
 
 [imf,residual] = emd(signal,'MaxNumIMF',10);
 
-figure('Name', 'IMFs')
+figure(30)
 clf
-subplot(411),plot(t,imf(:,1),'LineWidth',1),xlabel(''),ylabel('IMF1'),title('IMFs'),grid,set(gca,'FontSize',16);
-subplot(412),plot(t,imf(:,2),'LineWidth',1),xlabel(''),ylabel('IMF2'),title(''),grid,set(gca,'FontSize',16);
-subplot(413),plot(t,imf(:,3),'LineWidth',1),xlabel(''),ylabel('IMF3'),title(''),grid,set(gca,'FontSize',16);
-subplot(414),plot(t,imf(:,4),'LineWidth',1),xlabel('Time [s]'),ylabel('IMF4'),title(''),grid,set(gca,'FontSize',16);
-% subplot(515),plot(t,imf(:,5),'LineWidth',1),xlabel(''),ylabel('IMF5'),title(''),grid,set(gca,'FontSize',16);
-% subplot(616),plot(t,imf(:,6),'LineWidth',1),xlabel('Time [s]'),ylabel('IMF6'),title(''),grid,set(gca,'FontSize',16);
-grid on
+subplot(311),plot(t,imf(:,1),'LineWidth',1),xlabel('Time [s]'),ylabel(''),title('IMF 1'),grid,set(gca,'FontSize',16);
+subplot(312),plot(t,imf(:,2),'LineWidth',1),xlabel('Time [s]'),ylabel(''),title('IMF 2'),grid,set(gca,'FontSize',16);
+subplot(313),plot(t,imf(:,3),'LineWidth',1),xlabel('Time [s]'),ylabel(''),title('IMF 3'),grid,set(gca,'FontSize',16);
 
 
 
-figure('Name', 'IMFs')
+
+s = size(imf);
+Fs = 44100;
+
+for i = 1:s(2)
+z(:,i) = hilbert(imf(:,i));
+instfreq(:,i) = Fs/(2*pi)*diff(unwrap(angle(z(:,i))));
+%figure(i+10)
+%clf
+%plot(t(2:end),instfreq,'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title(''),grid,set(gca,'FontSize',16);
+%title(['Instantaneous Frequency of IMF', num2str(i)])
+end
+figure(31)
 clf
-subplot(211),plot(t,imf(:,1)+imf(:,2),'LineWidth',1),xlabel(''),ylabel('IMF1+2'),title('IMF 1, 2 and real signal'),grid,set(gca,'FontSize',16);
-subplot(212),plot(t,signal,'LineWidth',1),xlabel(''),ylabel('Signal'),title(''),grid,set(gca,'FontSize',16);
+subplot(311),plot(t(2:end),instfreq(:,1),'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title('Instantaneous Frequency 1'),grid,set(gca,'FontSize',16);
+subplot(312),plot(t(2:end),instfreq(:,2),'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title('Instantaneous Frequency 2'),grid,set(gca,'FontSize',16);
+subplot(313),plot(t(2:end),instfreq(:,3),'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title('Instantaneous Frequency 3'),grid,set(gca,'FontSize',16);
+
 end
 
