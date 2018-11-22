@@ -1,8 +1,8 @@
-function [imf,residual,inst1,inst2,inst3,inst4] = EMD(signal,t)
+function [imf,residual,hilb] = EMD(signal,t)
 
 t = t - t(1,1);
 
-[imf,residual] = emd(signal,'MaxNumIMF',10);
+[imf,residual] = emd(signal,'MaxNumIMF',3);
 
 figure(30)
 clf
@@ -11,7 +11,7 @@ subplot(312),plot(t,imf(:,2),'LineWidth',1),xlabel('Time [s]'),ylabel(''),title(
 subplot(313),plot(t,imf(:,3),'LineWidth',1),xlabel('Time [s]'),ylabel(''),title('IMF 3'),grid,set(gca,'FontSize',16);
 
 
-
+return
 
 s = size(imf);
 Fs = 44100;
@@ -27,8 +27,11 @@ end
 figure(31)
 clf
 subplot(311),plot(t(2:end),instfreq(:,1),'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title('Instantaneous Frequency 1'),grid,set(gca,'FontSize',16);
+xlim([0.005 0.014])
 subplot(312),plot(t(2:end),instfreq(:,2),'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title('Instantaneous Frequency 2'),grid,set(gca,'FontSize',16);
+xlim([0.0005 0.014])
 subplot(313),plot(t(2:end),instfreq(:,3),'LineWidth',1),xlabel('Time [s]'),ylabel('Hz'),title('Instantaneous Frequency 3'),grid,set(gca,'FontSize',16);
-
+xlim([0.0005 0.014])
+%hilb = z;
 end
 
